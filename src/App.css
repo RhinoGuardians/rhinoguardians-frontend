@@ -1571,6 +1571,10 @@ a:hover {
   .header-brand h1 {
     font-size: var(--font-2xl);
   }
+
+  .header-subtitle {
+    font-size: var(--font-xs);
+  }
 }
 
 @media (max-width: 992px) {
@@ -1589,15 +1593,35 @@ a:hover {
     max-height: 600px;
   }
 
+  /* Header improvements for tablet */
+  .header {
+    padding: var(--space-4) var(--space-5);
+  }
+
   .header-content {
-    flex-direction: column;
-    align-items: flex-start;
     gap: var(--space-4);
   }
 
+  .header-brand h1 {
+    font-size: var(--font-xl);
+  }
+
+  .header-subtitle {
+    font-size: var(--font-xs);
+  }
+
   .header-nav {
-    width: 100%;
-    justify-content: space-around;
+    gap: var(--space-2);
+  }
+
+  .nav-button {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-xs);
+  }
+
+  .status-indicator {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-xs);
   }
 
   .analytics-charts,
@@ -1617,15 +1641,61 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-  .nav-label {
-    display: none;
+  /* Header mobile optimization */
+  .header {
+    padding: var(--space-3) var(--space-4);
   }
 
-  .nav-button {
-    padding: var(--space-2) var(--space-3);
+  .header-content {
+    gap: var(--space-3);
   }
 
   .header-brand h1 {
+    font-size: var(--font-lg);
+  }
+
+  .header-subtitle {
+    display: none; /* Hide subtitle on mobile for cleaner look */
+  }
+
+  .header-nav {
+    order: 3; /* Move nav to bottom */
+    width: 100%;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .header-info {
+    order: 2;
+    gap: var(--space-3);
+  }
+
+  .nav-label {
+    display: none; /* Icon-only navigation on mobile */
+  }
+
+  .nav-button {
+    flex: 1;
+    justify-content: center;
+    padding: var(--space-3);
+    font-size: var(--font-lg); /* Larger icons */
+  }
+
+  .nav-button .nav-icon {
+    margin: 0;
+  }
+
+  .status-indicator {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-xs);
+  }
+
+  .status-text {
+    display: none; /* Only show status dot on mobile */
+  }
+
+  .theme-toggle {
+    padding: var(--space-2);
     font-size: var(--font-xl);
   }
 
@@ -1648,23 +1718,96 @@ a:hover {
 }
 
 @media (max-width: 576px) {
+  /* Header extra small screens */
+  .header {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .header-content {
+    gap: var(--space-2);
+  }
+
+  .header-brand {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-brand h1 {
+    font-size: var(--font-base);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-info {
+    gap: var(--space-2);
+  }
+
+  .status-indicator {
+    padding: var(--space-2);
+    min-width: auto;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .nav-button {
+    padding: var(--space-2);
+    font-size: var(--font-base);
+    border-radius: var(--radius-sm);
+  }
+
+  .theme-toggle {
+    padding: var(--space-2);
+    font-size: var(--font-lg);
+  }
+
   .dashboard-layout,
   .page-history,
   .page-analytics {
-    padding: var(--space-4);
+    padding: var(--space-3);
   }
 
   .detection-image {
-    height: 160px;
+    height: 180px;
   }
 
-  .header {
-    padding: var(--space-3) var(--space-4);
+  .detection-content {
+    padding: var(--space-5);
   }
 
   .sidebar,
   .dashboard-detections {
     padding: var(--space-4);
+  }
+}
+
+/* Extra defensive for very small screens */
+@media (max-width: 360px) {
+  .header {
+    padding: var(--space-2);
+  }
+
+  .header-brand h1 {
+    font-size: var(--font-sm);
+  }
+
+  .nav-button {
+    padding: var(--space-1) var(--space-2);
+    min-width: 44px; /* Ensure touch target size */
+    min-height: 44px;
+  }
+
+  .theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .status-indicator {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
