@@ -9,6 +9,7 @@ import {
   MdShield
 } from 'react-icons/md'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import PillRail from './PillRail'
 
 const pages = [
   { id: 'dashboard', label: 'Dashboard', icon: MdDashboard },
@@ -85,37 +86,16 @@ export default function Header({ currentPage, onNavigate }) {
         </div>
 
         {/* CENTER: Desktop nav - Centered with flex-1 */}
-        <nav className="
-          hidden md:flex items-center justify-center gap-2
-          flex-1
-          text-sm font-medium
-        ">
-          {pages.map((page) => {
-            const Icon = page.icon
-            const isActive = currentPage === page.id
-            return (
-              <button
-                key={page.id}
-                className={`
-                  inline-flex items-center gap-2
-                  px-4 py-2 rounded-full
-                  h-9
-                  transition-all duration-200
-                  focus-visible:outline-2 focus-visible:outline-brand-600 focus-visible:outline-offset-2
-                  ${
-                    isActive
-                      ? 'bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-soft hover:shadow-md hover:from-brand-700 hover:to-brand-800'
-                      : 'bg-transparent text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-neutral-50'
-                  }
-                `}
-                onClick={() => onNavigate(page.id)}
-              >
-                <Icon className="h-4 w-4 flex-shrink-0" />
-                <span>{page.label}</span>
-              </button>
-            )
-          })}
-        </nav>
+        <div className="hidden md:flex items-center justify-center flex-1">
+          <PillRail
+            items={pages}
+            activeId={currentPage}
+            onChange={onNavigate}
+            size="sm"
+            align="center"
+            scrollable={false}
+          />
+        </div>
 
         {/* RIGHT: Status + Theme toggle */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -171,42 +151,17 @@ export default function Header({ currentPage, onNavigate }) {
         </div>
       </div>
 
-      {/* Mobile nav: Second row, explicit and simple - Max 56px height */}
-      <nav className="
-        md:hidden border-t border-neutral-200/70 dark:border-white/5
-      ">
-        <div className="
-          flex gap-2 px-4 py-3
-          overflow-x-auto no-scrollbar
-          text-sm font-medium
-          touch-pan-x
-        ">
-          {pages.map((page) => {
-            const Icon = page.icon
-            const isActive = currentPage === page.id
-            return (
-              <button
-                key={page.id}
-                className={`
-                  inline-flex items-center gap-2
-                  px-4 py-2 rounded-full whitespace-nowrap
-                  h-9
-                  transition-all duration-200
-                  ${
-                    isActive
-                      ? 'bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-soft'
-                      : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800'
-                }
-                `}
-                onClick={() => onNavigate(page.id)}
-              >
-                <Icon className="h-4 w-4" />
-                <span>{page.label}</span>
-              </button>
-            )
-          })}
-        </div>
-      </nav>
+      {/* Mobile nav: Second row, scrollable pills */}
+      <div className="md:hidden border-t border-neutral-200/70 dark:border-white/5 px-4 py-3">
+        <PillRail
+          items={pages}
+          activeId={currentPage}
+          onChange={onNavigate}
+          size="sm"
+          align="left"
+          scrollable={true}
+        />
+      </div>
     </header>
   )
 }
