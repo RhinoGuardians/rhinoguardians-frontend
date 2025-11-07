@@ -16,277 +16,206 @@ const pages = [
   { id: 'analytics', label: 'Analytics', icon: MdAnalytics }
 ]
 
+/**
+ * Header - Modern responsive header following Tailwind CSS 4.1 best practices
+ * - Single compact row with proper vertical spacing (py-2 to py-3)
+ * - Touch-optimized with pointer-* variants
+ * - Fixed empty white bar issue with proper layout structure
+ * - Three zones: Brand (never hidden) | Nav (center) | Actions (right)
+ */
 export default function Header({ currentPage, onNavigate }) {
-  const { theme, toggleTheme } = useTheme()
+  const { activeTheme, toggleTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
 
   // Detect scroll for header elevation effect
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    if (latest > 20) {
-      setScrolled(true)
-    } else {
-      setScrolled(false)
-    }
+    setScrolled(latest > 20)
   })
 
   return (
-    <motion.header
+    <header
       className={`
-        sticky top-0 z-[1100]
-        bg-[var(--color-bg-secondary)]
-        border-b border-[var(--color-border)]
-        transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]
-        backdrop-blur-[10px]
-        ${scrolled ? 'shadow-[var(--shadow-xl)]' : 'shadow-[var(--shadow-md)]'}
+        sticky top-0 z-40
+        bg-neutral-50/95 dark:bg-neutral-950/92
+        backdrop-blur-sm
+        border-b border-neutral-200/70 dark:border-white/5
+        transition-shadow duration-300
+        ${scrolled ? 'shadow-xl shadow-black/5 dark:shadow-black/30' : 'shadow-md shadow-black/5 dark:shadow-black/20'}
       `}
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
     >
-      <motion.div
-        className="
-          max-w-[1600px] mx-auto
-          px-2 py-3
-          sm:px-3 sm:py-3
-          md:px-4 md:py-4
-          lg:px-5 lg:py-5
-          xl:px-6 xl:py-5
-          flex flex-col items-center
-          gap-3
-          md:gap-4
-          lg:gap-5
-        "
-        animate={{
-          paddingTop: scrolled ? 'var(--space-3)' : 'var(--space-4)',
-          paddingBottom: scrolled ? 'var(--space-3)' : 'var(--space-4)'
-        }}
-        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      >
-        {/* TOP: Brand - Full Width Centered */}
-        <div className="w-full flex justify-center items-center">
-          <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
-            <motion.div
-              className="
-                w-8 h-8
-                sm:w-9 sm:h-9
-                md:w-10 md:h-10
-                lg:w-12 lg:h-12
-                xl:w-14 xl:h-14
-                rounded-lg lg:rounded-xl
-                flex items-center justify-center
-                bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)]
-                shadow-[var(--shadow-md)]
-                flex-shrink-0 relative overflow-hidden
-                transition-all duration-[150ms] ease-[cubic-bezier(0.4,0,0.2,1)]
-                hover:scale-105 hover:shadow-[var(--shadow-lg)]
-                before:content-[''] before:absolute before:inset-0
-                before:bg-gradient-to-br before:from-white/20 before:to-transparent
-                before:opacity-0 before:transition-opacity before:duration-[150ms]
-                hover:before:opacity-100
-              "
-              whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-              transition={{ duration: 0.5 }}
-            >
-              <MdShield className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8 text-white" />
-            </motion.div>
-            <div className="flex flex-col gap-0.5 items-center text-center">
-              <h1 className="
-                text-base leading-tight
-                sm:text-lg
-                md:text-xl
-                lg:text-2xl
-                xl:text-3xl
-                font-extrabold tracking-tight
-                text-[var(--color-text-primary)]
-                whitespace-nowrap
-              ">
-                RhinoGuardians
-              </h1>
-              <p className="
-                text-[10px] leading-tight
-                sm:text-xs
-                md:text-xs
-                lg:text-sm
-                font-medium
-                text-[var(--color-text-secondary)]
-                whitespace-nowrap
-                hidden sm:block
-              ">
-                Real-time Wildlife Protection Console
-              </p>
+      {/* Single row: brand + nav + actions */}
+      <div className="mx-auto max-w-6xl flex items-center justify-between gap-4 px-4 py-3">
+        {/* LEFT: Brand (never shrinks away) */}
+        <div className="flex items-center gap-3 shrink-0 min-w-0">
+          <motion.div
+            className="
+              flex h-10 w-10 items-center justify-center
+              rounded-2xl bg-emerald-700
+              shadow-md shadow-emerald-700/20
+              hover:shadow-lg hover:shadow-emerald-700/30
+              transition-all duration-200
+            "
+            whileHover={{ scale: 1.05, rotate: [0, -5, 5, -5, 0] }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
+            <MdShield className="h-6 w-6 text-white" />
+          </motion.div>
+          <div className="leading-tight">
+            <div className="
+              text-base font-semibold tracking-tight
+              text-neutral-900 dark:text-neutral-50
+              truncate
+            ">
+              RhinoGuardians
+            </div>
+            <div className="
+              text-[11px] text-neutral-500 dark:text-neutral-400
+              hidden sm:block
+            ">
+              Real-time Wildlife Protection Console
             </div>
           </div>
         </div>
 
-        {/* BOTTOM ROW: Nav + Status + Theme */}
-        <div className="
-          w-full flex items-center justify-between
-          gap-2
-          md:gap-3
-          lg:gap-4
-          px-0
-          sm:px-1
-          md:px-2
-          lg:px-3
-          xl:px-4
+        {/* CENTER: Desktop nav */}
+        <nav className="
+          hidden md:flex items-center gap-2
+          text-sm font-medium text-neutral-500
         ">
-          {/* Nav */}
-          <nav className="
-            flex items-center justify-center
-            gap-0
-            sm:gap-0.5
-            md:gap-1
-            flex-1
-          ">
-            {pages.map((page, index) => {
-              const Icon = page.icon
-              const isActive = currentPage === page.id
-              return (
-                <motion.button
-                  key={page.id}
-                  className={`
-                    inline-flex items-center justify-center
-                    gap-1 sm:gap-1.5 md:gap-2
-                    px-2 py-2
-                    sm:px-2 sm:py-2
-                    md:px-3 md:py-2
-                    lg:px-4 lg:py-2
-                    xl:px-5 xl:py-2
-                    rounded-full
-                    border-none
-                    text-xs
-                    sm:text-xs
-                    md:text-sm
-                    font-semibold tracking-wide
-                    cursor-pointer
-                    transition-all duration-[150ms] ease-[cubic-bezier(0.4,0,0.2,1)]
-                    relative whitespace-nowrap overflow-hidden
-                    min-w-[44px] min-h-[44px]
-                    sm:min-w-0 sm:min-h-0
-                    focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2
-                    ${
-                      isActive
-                        ? 'bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)]'
-                        : 'bg-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-hover)]'
-                    }
-                  `}
-                  onClick={() => onNavigate(page.id)}
-                  whileHover={{ y: -1, scale: 1.02 }}
-                  whileTap={{ y: 0, scale: 0.98 }}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.2,
-                    delay: index * 0.1,
-                    ease: [0.4, 0, 0.2, 1]
-                  }}
-                >
-                  <Icon className="
-                    w-5 h-5
-                    sm:w-4 sm:h-4
-                    md:w-[18px] md:h-[18px]
-                    lg:w-5 lg:h-5
-                    flex-shrink-0 relative z-[1]
-                  " />
-                  <span className="
-                    hidden
-                    sm:inline
-                    relative z-[1]
-                  ">
-                    {page.label}
-                  </span>
-                </motion.button>
-              )
-            })}
-          </nav>
+          {pages.map((page, index) => {
+            const Icon = page.icon
+            const isActive = currentPage === page.id
+            return (
+              <motion.button
+                key={page.id}
+                className={`
+                  inline-flex items-center gap-2
+                  px-4 py-2 rounded-full
+                  transition-all duration-200
+                  pointer-fine:px-4 pointer-fine:py-2
+                  pointer-coarse:px-5 pointer-coarse:py-3
+                  focus-visible:outline-2 focus-visible:outline-brand-600 focus-visible:outline-offset-2
+                  ${
+                    isActive
+                      ? 'bg-emerald-700 text-white shadow-md shadow-emerald-700/20 hover:bg-emerald-800 hover:shadow-lg'
+                      : 'bg-transparent text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-50'
+                  }
+                `}
+                onClick={() => onNavigate(page.id)}
+                whileHover={{ y: -1, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: index * 0.05 }}
+              >
+                <Icon className="h-[18px] w-[18px] flex-shrink-0" />
+                <span>{page.label}</span>
+              </motion.button>
+            )
+          })}
+        </nav>
 
-          {/* Status + Theme */}
-          <div className="
-            flex items-center
-            gap-2
-            md:gap-3
-            lg:gap-4
-            flex-shrink-0
-          ">
-            <motion.div
+        {/* RIGHT: Status + Theme toggle */}
+        <div className="flex items-center gap-3 shrink-0">
+          <motion.div
+            className="
+              flex items-center gap-2
+              px-3 py-1.5 rounded-full
+              bg-neutral-100 dark:bg-neutral-900
+              border border-neutral-200 dark:border-neutral-800
+              pointer-coarse:px-4 pointer-coarse:py-2
+            "
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
+            <span
               className="
-                inline-flex items-center
-                gap-1 sm:gap-1.5 md:gap-2
-                px-1 py-1
-                sm:px-2 sm:py-2
-                md:px-3 md:py-2
-                rounded-full
-                bg-[var(--color-bg-tertiary)]
-                text-xs
-                sm:text-xs
-                md:text-sm
-                font-semibold
-                text-[var(--color-text-secondary)]
-                border border-[var(--color-border)]
-                min-w-[44px] min-h-[44px]
-                justify-center
-                sm:min-w-0 sm:min-h-0
-                sm:justify-start
+                h-2 w-2 rounded-full bg-emerald-500
+                shadow-[0_0_8px_rgb(16_185_129)]
+                animate-pulse
               "
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-            >
-              <span className="
-                w-2 h-2
-                rounded-full
-                bg-[var(--color-success)]
-                shadow-[0_0_8px_var(--color-success)]
-                animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]
-              " />
-              <span className="
-                whitespace-nowrap
-                hidden
-                sm:inline
-              ">
-                Live feed
-              </span>
-            </motion.div>
+            />
+            <span className="
+              text-xs font-medium
+              text-neutral-700 dark:text-neutral-300
+              hidden sm:inline
+            ">
+              Live feed
+            </span>
+          </motion.div>
 
-            <motion.button
-              className="
-                inline-flex items-center justify-center
-                w-8 h-8
-                sm:w-9 sm:h-9
-                md:w-10 md:h-10
-                rounded-md
-                border border-[var(--color-border)]
-                bg-[var(--color-bg-tertiary)]
-                cursor-pointer
-                text-base
-                sm:text-lg
-                md:text-xl
-                text-[var(--color-text-secondary)]
-                transition-all duration-[150ms] ease-[cubic-bezier(0.4,0,0.2,1)]
-                hover:bg-[var(--color-bg-hover)]
-                hover:text-[var(--color-text-primary)]
-                hover:border-[var(--color-border-dark)]
-                active:scale-95
-                min-w-[44px] min-h-[44px]
-                sm:min-w-0 sm:min-h-0
-                focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2
-              "
-              onClick={toggleTheme}
-              aria-label={`Switch to ${
-                theme === 'light' ? 'dark' : 'light'
-              } mode`}
-              whileHover={{ scale: 1.08, rotate: 180 }}
-              whileTap={{ scale: 0.92 }}
-              initial={{ opacity: 0, rotate: -180 }}
-              animate={{ opacity: 1, rotate: 0 }}
-              transition={{ duration: 0.4, delay: 0.4 }}
-            >
-              {theme === 'light' ? <MdDarkMode /> : <MdLightMode />}
-            </motion.button>
-          </div>
+          <motion.button
+            className="
+              flex items-center justify-center
+              h-10 w-10 rounded-xl
+              bg-neutral-100 dark:bg-neutral-900
+              border border-neutral-200 dark:border-neutral-800
+              text-neutral-500 dark:text-neutral-400
+              hover:text-neutral-900 dark:hover:text-neutral-50
+              hover:bg-neutral-200 dark:hover:bg-neutral-800
+              hover:border-neutral-300 dark:hover:border-neutral-700
+              active:scale-95
+              transition-all duration-200
+              pointer-coarse:h-12 pointer-coarse:w-12
+              focus-visible:outline-2 focus-visible:outline-brand-600 focus-visible:outline-offset-2
+            "
+            onClick={toggleTheme}
+            aria-label={`Switch to ${activeTheme === 'light' ? 'dark' : 'light'} mode`}
+            whileHover={{ scale: 1.05, rotate: 180 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, rotate: -180 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            {activeTheme === 'light' ? (
+              <MdDarkMode className="h-5 w-5" />
+            ) : (
+              <MdLightMode className="h-5 w-5" />
+            )}
+          </motion.button>
         </div>
-      </motion.div>
-    </motion.header>
+      </div>
+
+      {/* Mobile nav: keeps logo visible, avoids tall whitespace */}
+      <nav className="
+        md:hidden border-t border-neutral-200/70 dark:border-white/5
+      ">
+        <div className="
+          flex gap-2 px-4 py-2
+          overflow-x-auto no-scrollbar
+          text-xs font-medium text-neutral-600 dark:text-neutral-400
+          touch-pan-x
+        ">
+          {pages.map((page) => {
+            const Icon = page.icon
+            const isActive = currentPage === page.id
+            return (
+              <button
+                key={page.id}
+                className={`
+                  inline-flex items-center gap-1.5
+                  px-3 py-1.5 rounded-full whitespace-nowrap
+                  transition-all duration-200
+                  pointer-coarse:px-4 pointer-coarse:py-2.5
+                  min-h-[44px] pointer-fine:min-h-0
+                  ${
+                    isActive
+                      ? 'bg-emerald-700 text-white'
+                      : 'bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                }
+                `}
+                onClick={() => onNavigate(page.id)}
+              >
+                <Icon className="h-4 w-4" />
+                <span>{page.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </nav>
+    </header>
   )
 }
