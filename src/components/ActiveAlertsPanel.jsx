@@ -16,7 +16,7 @@ import { FiAlertTriangle, FiChevronDown, FiChevronUp, FiMapPin, FiClock } from '
 import { format, formatDistanceToNow } from 'date-fns'
 import { useAlertRanger } from '../context/AlertRangerContext'
 import { STATUS_CONFIG, SEVERITY_CONFIG, formatAlertId } from '../types/alert'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function AlertItem({ alert, onSelect }) {
   const statusConfig = STATUS_CONFIG[alert.status]
@@ -86,8 +86,20 @@ function AlertItem({ alert, onSelect }) {
 
 export default function ActiveAlertsPanel({ onAlertSelect, onMapFocus }) {
   const { activeAlerts, recentlyResolvedAlerts, error, isPolling } = useAlertRanger()
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [showResolved, setShowResolved] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const handleChange = (event) => setIsExpanded(event.matches)
+
+    setIsExpanded(mq.matches)
+    mq.addEventListener('change', handleChange)
+
+    return () => mq.removeEventListener('change', handleChange)
+  }, [])
 
   const handleAlertClick = (alert) => {
     // Focus map on alert location
@@ -105,45 +117,52 @@ export default function ActiveAlertsPanel({ onAlertSelect, onMapFocus }) {
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="w-full h-full flex flex-col bg-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-xl shadow-2xl overflow-hidden"
+      className="relative z-40 w-full h-full"
     >
-      {/* Header */}
-      <div
-        className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-700 cursor-pointer"
-        onClick={() => setIsExpanded(!isExpanded)}
+      <motion.div
+        layout
+        className="fixed inset-x-0 bottom-0 max-h-[70vh] lg:static lg:max-h-none lg:h-full flex flex-col bg-slate-900/90 backdrop-blur-sm border border-slate-700 lg:rounded-xl rounded-t-3xl shadow-2xl overflow-hidden lg:overflow-visible"
       >
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <FiAlertTriangle className="w-5 h-5 text-red-400" />
-            {activeAlerts.length > 0 && (
-              <motion.div
-                className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-              />
-            )}
-          </div>
-          <div>
-            <h2 className="text-white font-bold text-sm">Active Alerts</h2>
-            <p className="text-xs text-slate-400">
-              {activeAlerts.length} {activeAlerts.length === 1 ? 'alert' : 'alerts'} active
-              {isPolling && ' • Live'}
-            </p>
-          </div>
+        <div className="lg:hidden flex justify-center pt-3 pb-1">
+          <span className="h-1.5 w-14 rounded-full bg-slate-700" />
         </div>
+      {/* Header */}
+        <div
+          className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 bg-slate-900/90 border-b border-slate-700 cursor-pointer"
+          onClick={() => setIsExpanded((prev) => !prev)}
+        >
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <FiAlertTriangle className="w-5 h-5 text-red-400" />
+              {activeAlerts.length > 0 && (
+                <motion.div
+                  className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                />
+              )}
+            </div>
+            <div className="text-left">
+              <h2 className="text-white font-semibold text-sm sm:text-base">Active Alerts</h2>
+              <p className="text-xs sm:text-sm text-slate-400">
+                {activeAlerts.length} {activeAlerts.length === 1 ? 'alert' : 'alerts'} active
+                {isPolling && ' • Live'}
+              </p>
+            </div>
+          </div>
 
-        <button className="p-1 hover:bg-slate-800 rounded transition-colors">
-          {isExpanded ? (
-            <FiChevronUp className="w-4 h-4 text-slate-400" />
-          ) : (
-            <FiChevronDown className="w-4 h-4 text-slate-400" />
-          )}
-        </button>
-      </div>
+          <button className="p-1.5 hover:bg-slate-800 rounded-lg transition-colors">
+            {isExpanded ? (
+              <FiChevronDown className="w-4 h-4 text-slate-400 rotate-180" />
+            ) : (
+              <FiChevronDown className="w-4 h-4 text-slate-400" />
+            )}
+          </button>
+        </div>
 
       {/* Error Banner */}
       {error && (
-        <div className="px-4 py-2 bg-red-500/10 border-b border-red-500/30">
+        <div className="px-4 sm:px-6 py-2 bg-red-500/10 border-b border-red-500/30">
           <p className="text-xs text-red-300">⚠️ {error}</p>
         </div>
       )}
@@ -157,13 +176,13 @@ export default function ActiveAlertsPanel({ onAlertSelect, onMapFocus }) {
             exit={{ height: 0 }}
             className="flex-1 overflow-hidden flex flex-col"
           >
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-3 max-h-[50vh] sm:max-h-[60vh] md:max-h-[65vh] lg:max-h-none pb-[calc(env(safe-area-inset-bottom,0)+1rem)]">
               {/* Active Alerts */}
               {activeAlerts.length === 0 ? (
                 <div className="text-center py-8">
-                  <FiAlertTriangle className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                  <p className="text-slate-400 text-sm">No active alerts</p>
-                  <p className="text-slate-500 text-xs mt-1">
+                  <FiAlertTriangle className="w-10 h-10 text-slate-600 mx-auto mb-3" />
+                  <p className="text-slate-400 text-sm sm:text-base">No active alerts</p>
+                  <p className="text-slate-500 text-xs sm:text-sm mt-1">
                     Rangers will appear here when alerted
                   </p>
                 </div>
@@ -184,7 +203,7 @@ export default function ActiveAlertsPanel({ onAlertSelect, onMapFocus }) {
                 <div className="pt-4 border-t border-slate-700">
                   <button
                     onClick={() => setShowResolved(!showResolved)}
-                    className="w-full flex items-center justify-between text-sm text-slate-400 hover:text-slate-300 transition-colors mb-3"
+                    className="w-full flex items-center justify-between text-xs sm:text-sm text-slate-400 hover:text-slate-300 transition-colors mb-3"
                   >
                     <span className="font-semibold">
                       Recently Resolved ({recentlyResolvedAlerts.length})
@@ -220,8 +239,8 @@ export default function ActiveAlertsPanel({ onAlertSelect, onMapFocus }) {
 
             {/* Footer */}
             {activeAlerts.length > 0 && (
-              <div className="px-4 py-2 bg-slate-900 border-t border-slate-700">
-                <p className="text-xs text-slate-500 text-center">
+              <div className="px-4 sm:px-6 py-3 bg-slate-900/90 border-t border-slate-700">
+                <p className="text-xs sm:text-sm text-slate-500 text-center">
                   Click an alert to view details and location
                 </p>
               </div>
@@ -229,6 +248,7 @@ export default function ActiveAlertsPanel({ onAlertSelect, onMapFocus }) {
           </motion.div>
         )}
       </AnimatePresence>
+      </motion.div>
     </motion.div>
   )
 }
