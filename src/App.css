@@ -1,0 +1,974 @@
+/**
+ * RhinoGuardians - Tailwind CSS 4.1 Design System
+ * Modern, performant, and cohesive UI with proper dark mode support
+ */
+
+@import "tailwindcss";
+
+/* ==================== TAILWIND 4.1 @THEME DESIGN TOKENS ==================== */
+@theme {
+  /* Typography - System font stack for modern, native feel */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+
+  /* Brand Colors - Using oklch for better color consistency */
+  --color-brand-50: oklch(0.98 0.03 150);
+  --color-brand-100: oklch(0.95 0.05 150);
+  --color-brand-200: oklch(0.90 0.08 150);
+  --color-brand-300: oklch(0.85 0.10 150);
+  --color-brand-400: oklch(0.78 0.12 150);
+  --color-brand-500: oklch(0.72 0.14 150);
+  --color-brand-600: oklch(0.63 0.16 150);
+  --color-brand-700: oklch(0.54 0.18 150);
+  --color-brand-800: oklch(0.45 0.16 150);
+  --color-brand-900: oklch(0.35 0.14 150);
+  --color-brand-950: oklch(0.25 0.12 150);
+
+  /* Emerald accent for primary actions */
+  --color-emerald-700: oklch(0.53 0.15 160);
+  --color-emerald-800: oklch(0.45 0.14 160);
+
+  /* Extended spacing for precise layouts */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+
+  /* Custom shadows for depth */
+  --shadow-soft: 0 2px 8px -2px rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-elevated: 0 8px 24px -4px rgb(0 0 0 / 0.12), 0 2px 8px -2px rgb(0 0 0 / 0.08);
+
+  /* Border radius for modern rounded corners */
+  --radius-3xl: 1.75rem;
+
+  /* Animation timing functions */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==================== CUSTOM DARK MODE VARIANT (Class-driven) ==================== */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==================== GLOBAL RESET & BASE STYLES ==================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  @apply font-sans antialiased;
+  @apply bg-neutral-50 text-neutral-900;
+  @apply dark:bg-neutral-950 dark:text-neutral-50;
+  @apply overflow-x-hidden;
+  @apply transition-colors duration-300;
+}
+
+/* ==================== APP LAYOUT ==================== */
+.app {
+  @apply flex flex-col min-h-screen max-h-screen overflow-x-hidden;
+}
+
+.app-main {
+  @apply flex-1 overflow-y-auto overflow-x-hidden;
+  @apply bg-neutral-50 dark:bg-neutral-950;
+}
+
+/* Custom Scrollbar Styling */
+.app-main::-webkit-scrollbar,
+.detections-list::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+.app-main::-webkit-scrollbar-track,
+.detections-list::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+  @apply bg-neutral-200/50 dark:bg-neutral-800/50 rounded-full;
+}
+
+.app-main::-webkit-scrollbar-thumb,
+.detections-list::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  @apply bg-neutral-400 dark:bg-neutral-600 rounded-full;
+  @apply hover:bg-neutral-500 dark:hover:bg-neutral-500;
+  @apply transition-colors;
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold tracking-tight text-neutral-900 dark:text-neutral-50;
+}
+
+h1 { @apply text-4xl sm:text-5xl lg:text-6xl; }
+h2 { @apply text-3xl sm:text-4xl; }
+h3 { @apply text-2xl sm:text-3xl; }
+h4 { @apply text-xl sm:text-2xl; }
+h5 { @apply text-lg sm:text-xl; }
+h6 { @apply text-base sm:text-lg; }
+
+p {
+  @apply text-neutral-600 dark:text-neutral-400;
+}
+
+a {
+  @apply text-brand-600 dark:text-brand-400;
+  @apply hover:text-brand-700 dark:hover:text-brand-300;
+  @apply transition-colors;
+  @apply no-underline;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== DASHBOARD LAYOUT ==================== */
+.page-dashboard {
+  @apply h-full flex flex-col;
+}
+
+.dashboard-layout {
+  @apply grid gap-4 sm:gap-6 lg:gap-8 xl:gap-10;
+  @apply p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12;
+  @apply grid-cols-1 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr] 2xl:grid-cols-[420px_1fr];
+  @apply h-[calc(100vh-88px)] sm:h-[calc(100vh-96px)] lg:h-[calc(100vh-104px)] overflow-hidden w-full;
+}
+
+.dashboard-main {
+  @apply flex flex-col gap-4 sm:gap-6 lg:gap-8;
+}
+
+.map-section {
+  @apply flex-1 bg-white dark:bg-neutral-900;
+  @apply rounded-2xl sm:rounded-3xl lg:rounded-[2rem] overflow-hidden;
+  @apply shadow-xl shadow-black/5 dark:shadow-black/40;
+  @apply border border-neutral-200/70 dark:border-white/5;
+  @apply relative;
+  @apply transition-all duration-300;
+  @apply hover:shadow-2xl hover:border-neutral-300 dark:hover:border-white/10;
+}
+
+.map-section .leaflet-container {
+  @apply h-full w-full rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+}
+
+.dashboard-detections {
+  @apply bg-white/90 dark:bg-neutral-900/85;
+  @apply backdrop-blur-xl;
+  @apply rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 xl:p-10;
+  @apply shadow-lg shadow-black/5 dark:shadow-black/40;
+  @apply border border-neutral-200/80 dark:border-white/5;
+  @apply overflow-y-auto;
+  @apply flex flex-col;
+  @apply transition-all duration-300;
+}
+
+.detections-header {
+  @apply flex justify-between items-center;
+  @apply mb-5 pb-3;
+  @apply border-b-2 border-neutral-200 dark:border-neutral-700;
+}
+
+.detections-header h3 {
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply text-2xl font-bold tracking-tight;
+}
+
+.loading-spinner {
+  @apply animate-[spin_1s_linear_infinite];
+  @apply text-2xl text-brand-600 dark:text-brand-400;
+}
+
+.detections-list {
+  @apply flex-1 overflow-y-auto;
+  @apply flex flex-col gap-6 pr-2;
+}
+
+.no-results {
+  @apply text-center p-12;
+  @apply text-neutral-600 dark:text-neutral-400;
+}
+
+.no-results p {
+  @apply mb-4 text-lg font-medium;
+}
+
+/* ==================== SIDEBAR ==================== */
+.sidebar {
+  @apply bg-white/90 dark:bg-neutral-900/85;
+  @apply backdrop-blur-xl;
+  @apply rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+  @apply p-5 sm:p-6 lg:p-8 xl:p-10;
+  @apply shadow-xl shadow-black/5 dark:shadow-black/40;
+  @apply border border-neutral-200/80 dark:border-white/5;
+  @apply overflow-y-auto;
+  @apply flex flex-col gap-5 sm:gap-6 lg:gap-8;
+  @apply transition-all duration-300;
+  @apply relative;
+}
+
+.sidebar::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-b from-brand-500/5 to-transparent;
+  @apply pointer-events-none rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+}
+
+.sidebar-header h2 {
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply text-xl sm:text-2xl lg:text-3xl font-bold mb-2 tracking-tight;
+}
+
+.controls-section {
+  @apply flex flex-col gap-3 sm:gap-4;
+}
+
+.filters-section h3,
+.stats-section h3 {
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply text-base sm:text-lg lg:text-xl font-bold mb-4 sm:mb-5 pb-2 sm:pb-3;
+  @apply border-b-2 border-brand-600 dark:border-brand-400;
+}
+
+.filter-group {
+  @apply flex flex-col gap-2 sm:gap-2.5 mb-4 sm:mb-5;
+}
+
+.filter-group label {
+  @apply text-sm sm:text-base font-semibold;
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply tracking-wide;
+}
+
+.filter-input,
+.filter-select {
+  @apply px-4 py-3 sm:px-5 sm:py-3.5 lg:px-6 lg:py-4;
+  @apply border-2 border-neutral-300 dark:border-neutral-700;
+  @apply rounded-lg sm:rounded-xl text-sm sm:text-base font-medium;
+  @apply bg-neutral-50 dark:bg-neutral-950;
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply transition-all duration-300;
+  @apply hover:border-neutral-400 dark:hover:border-neutral-600;
+  @apply focus:outline-none focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600;
+}
+
+.stats-section {
+  @apply mt-auto pt-4 sm:pt-5 lg:pt-6;
+  @apply border-t-2 border-neutral-200 dark:border-neutral-800;
+}
+
+.stat-item {
+  @apply flex justify-between items-center;
+  @apply py-3 sm:py-4;
+  @apply border-b border-neutral-200 dark:border-neutral-800;
+  @apply last:border-b-0;
+}
+
+.stat-label {
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply text-sm sm:text-base font-medium;
+}
+
+.stat-value {
+  @apply font-bold text-xl sm:text-2xl lg:text-3xl;
+  @apply text-brand-600 dark:text-brand-400;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+  @apply px-5 py-3 sm:px-6 sm:py-3.5 lg:px-7 lg:py-4;
+  @apply border-none rounded-lg sm:rounded-xl;
+  @apply text-sm sm:text-base lg:text-lg font-semibold tracking-wide;
+  @apply cursor-pointer;
+  @apply transition-all duration-300;
+  @apply inline-flex items-center justify-center gap-2 sm:gap-2.5;
+  @apply shadow-md;
+  @apply relative overflow-hidden;
+  @apply hover:-translate-y-0.5 hover:shadow-lg;
+  @apply active:translate-y-0 active:shadow-md;
+}
+
+.btn::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-br from-white/20 to-white/0;
+  @apply opacity-0 transition-opacity duration-200;
+}
+
+.btn:hover::before {
+  @apply opacity-100;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-br from-brand-600 to-brand-700;
+  @apply text-white;
+  @apply hover:from-brand-700 hover:to-brand-800;
+}
+
+.btn-secondary {
+  @apply bg-neutral-100 dark:bg-neutral-800;
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply border-2 border-neutral-300 dark:border-neutral-700;
+  @apply hover:bg-neutral-200 dark:hover:bg-neutral-700;
+}
+
+.btn-alert {
+  @apply bg-gradient-to-br from-red-600 to-red-700;
+  @apply text-white;
+  @apply hover:from-red-700 hover:to-red-800 hover:shadow-xl;
+}
+
+.btn-full {
+  @apply w-full;
+}
+
+.btn-small {
+  @apply px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm;
+}
+
+/* ==================== DETECTION CARD ==================== */
+.detection-card {
+  @apply bg-white dark:bg-neutral-900;
+  @apply border-2 border-neutral-200 dark:border-neutral-800;
+  @apply rounded-2xl sm:rounded-3xl lg:rounded-[2rem] overflow-hidden;
+  @apply transition-all duration-300;
+  @apply cursor-pointer shadow-lg;
+  @apply relative w-full flex flex-col;
+  @apply backdrop-blur-xl;
+}
+
+.detection-card::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-br from-transparent via-brand-500/5 to-transparent;
+  @apply opacity-0 transition-opacity duration-300;
+  @apply pointer-events-none z-0;
+}
+
+.detection-card::after {
+  content: '';
+  @apply absolute -inset-0.5;
+  @apply bg-gradient-to-br from-brand-600 to-brand-700;
+  @apply opacity-0 transition-opacity duration-300;
+  @apply pointer-events-none -z-10 rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+}
+
+.detection-card:hover::before {
+  @apply opacity-100;
+}
+
+.detection-card:hover::after {
+  @apply opacity-10;
+}
+
+.detection-card:hover {
+  @apply border-brand-600 dark:border-brand-400;
+  @apply shadow-2xl -translate-y-1;
+}
+
+.detection-card.selected {
+  @apply border-brand-600 dark:border-brand-400;
+  @apply shadow-2xl scale-[1.01];
+}
+
+.detection-card.threat-danger {
+  @apply border-l-[10px] sm:border-l-[12px] border-l-red-600;
+}
+
+.detection-card.threat-safe {
+  @apply border-l-[10px] sm:border-l-[12px] border-l-green-600;
+}
+
+.detection-image {
+  @apply relative w-full h-[240px] sm:h-[280px] lg:h-[320px] overflow-hidden;
+  @apply bg-gradient-to-b from-neutral-200 to-neutral-100;
+  @apply dark:from-neutral-800 dark:to-neutral-900;
+}
+
+.detection-image img {
+  @apply w-full h-full object-cover;
+  @apply transition-transform duration-500;
+}
+
+.detection-card:hover .detection-image img {
+  @apply scale-110;
+}
+
+.image-overlay {
+  @apply absolute top-4 right-4 sm:top-5 sm:right-5 lg:top-6 lg:right-6 z-10;
+  @apply backdrop-blur-md bg-black/30;
+  @apply px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl;
+}
+
+/* ==================== BADGES ==================== */
+.badge {
+  @apply inline-block px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3;
+  @apply rounded-full text-xs sm:text-sm lg:text-base font-extrabold;
+  @apply uppercase tracking-[0.08em] shadow-md;
+}
+
+.badge-rhino {
+  @apply bg-gradient-to-br from-green-600 to-green-700 text-white;
+}
+
+.badge-human {
+  @apply bg-gradient-to-br from-red-600 to-red-700 text-white;
+}
+
+.badge-vehicle {
+  @apply bg-gradient-to-br from-yellow-600 to-yellow-700 text-white;
+}
+
+.status-badge {
+  @apply inline-block px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3;
+  @apply rounded-lg sm:rounded-xl text-xs sm:text-sm lg:text-base font-bold;
+  @apply capitalize tracking-wide;
+}
+
+.status-confirmed {
+  @apply bg-green-100 dark:bg-green-900/30;
+  @apply text-green-700 dark:text-green-400;
+  @apply border-2 border-green-600;
+}
+
+.status-threat {
+  @apply bg-red-100 dark:bg-red-900/30;
+  @apply text-red-700 dark:text-red-400;
+  @apply border-2 border-red-600;
+}
+
+.status-investigating {
+  @apply bg-yellow-100 dark:bg-yellow-900/30;
+  @apply text-yellow-700 dark:text-yellow-400;
+  @apply border-2 border-yellow-600;
+}
+
+/* ==================== ALERT NOTIFICATIONS ==================== */
+.alerts-container {
+  @apply fixed top-[100px] right-6 z-[1600];
+  @apply flex flex-col gap-4;
+  @apply max-w-[420px] pointer-events-none;
+}
+
+.alert-toast {
+  @apply bg-white dark:bg-neutral-900;
+  @apply rounded-xl shadow-2xl overflow-hidden;
+  @apply pointer-events-auto;
+  @apply border border-neutral-200 dark:border-neutral-800;
+  @apply backdrop-blur-xl;
+}
+
+.alert-content {
+  @apply flex items-start gap-4 p-5;
+}
+
+.alert-icon {
+  @apply text-2xl flex-shrink-0;
+}
+
+.alert-body {
+  @apply flex-1 min-w-0;
+}
+
+.alert-message {
+  @apply font-bold text-base mb-1;
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply tracking-tight;
+}
+
+.alert-subtext {
+  @apply text-sm text-neutral-600 dark:text-neutral-400 font-medium;
+}
+
+.alert-close {
+  @apply bg-transparent border-none;
+  @apply text-xl cursor-pointer;
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply p-0 w-8 h-8;
+  @apply flex items-center justify-center;
+  @apply rounded-full flex-shrink-0;
+  @apply transition-all duration-200;
+  @apply hover:bg-neutral-100 dark:hover:bg-neutral-800;
+  @apply hover:text-neutral-900 dark:hover:text-neutral-50;
+  @apply hover:scale-110;
+}
+
+.alert-progress {
+  @apply h-1 bg-neutral-200 dark:bg-neutral-800;
+}
+
+.alert-progress-bar {
+  @apply h-full transition-[width] duration-100;
+}
+
+.alert-critical {
+  @apply border-l-4 border-l-red-600;
+}
+
+.alert-critical .alert-progress-bar {
+  @apply bg-gradient-to-r from-red-600 to-red-700;
+}
+
+.alert-warning {
+  @apply border-l-4 border-l-yellow-600;
+}
+
+.alert-warning .alert-progress-bar {
+  @apply bg-gradient-to-r from-yellow-600 to-yellow-700;
+}
+
+.alert-success {
+  @apply border-l-4 border-l-green-600;
+}
+
+.alert-success .alert-progress-bar {
+  @apply bg-gradient-to-r from-green-600 to-green-700;
+}
+
+.alert-info {
+  @apply border-l-4 border-l-blue-600;
+}
+
+.alert-info .alert-progress-bar {
+  @apply bg-gradient-to-r from-blue-600 to-blue-700;
+}
+
+/* ==================== HISTORY & ANALYTICS PAGES ==================== */
+.page-history,
+.page-analytics {
+  @apply p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12;
+  @apply max-w-[1920px] mx-auto;
+}
+
+.history-header,
+.analytics-header {
+  @apply mb-6 sm:mb-8 lg:mb-10 xl:mb-12;
+}
+
+.header-title h2 {
+  @apply text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-neutral-900 dark:text-neutral-50;
+  @apply mb-2 sm:mb-3 lg:mb-4 font-extrabold tracking-tight;
+}
+
+.subtitle {
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply text-base sm:text-lg lg:text-xl font-medium;
+}
+
+.history-controls,
+.chart-card {
+  @apply bg-white/90 dark:bg-neutral-900/85;
+  @apply backdrop-blur-xl;
+  @apply p-5 sm:p-6 lg:p-8 xl:p-10;
+  @apply rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+  @apply shadow-lg shadow-black/5 dark:shadow-black/40;
+  @apply border-2 border-neutral-200/80 dark:border-white/5;
+  @apply transition-all duration-300;
+  @apply relative overflow-hidden;
+}
+
+.history-controls::before,
+.chart-card::before {
+  content: '';
+  @apply absolute top-0 left-0 w-full h-1 sm:h-1.5;
+  @apply bg-gradient-to-r from-brand-600 via-brand-500 to-brand-600;
+  @apply opacity-0 transition-opacity duration-300;
+}
+
+.history-controls:hover::before,
+.chart-card:hover::before {
+  @apply opacity-100;
+}
+
+.history-controls:hover,
+.chart-card:hover {
+  @apply shadow-2xl -translate-y-0.5;
+  @apply border-brand-600/50 dark:border-brand-400/50;
+}
+
+.search-input {
+  @apply w-full px-4 py-3 sm:px-5 sm:py-4 lg:px-6 lg:py-5;
+  @apply border-2 border-neutral-300 dark:border-neutral-700;
+  @apply rounded-xl sm:rounded-2xl text-sm sm:text-base lg:text-lg font-medium;
+  @apply bg-neutral-50 dark:bg-neutral-950;
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply transition-all duration-300;
+  @apply hover:border-neutral-400 dark:hover:border-neutral-600;
+  @apply focus:outline-none focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600;
+}
+
+.metrics-grid {
+  @apply grid gap-4 sm:gap-5 lg:gap-6 xl:gap-8 mb-6 sm:mb-8 lg:mb-10;
+  @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
+}
+
+.metric-card {
+  @apply bg-white/90 dark:bg-neutral-900/85;
+  @apply backdrop-blur-xl;
+  @apply p-5 sm:p-6 lg:p-8 xl:p-10;
+  @apply rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+  @apply shadow-lg shadow-black/5 dark:shadow-black/40;
+  @apply border-2 border-neutral-200/80 dark:border-white/5;
+  @apply flex items-center gap-4 sm:gap-5 lg:gap-6;
+  @apply transition-all duration-300;
+  @apply relative overflow-hidden;
+  @apply hover:-translate-y-1 hover:shadow-2xl hover:border-brand-600/50;
+}
+
+.metric-card::after {
+  content: '';
+  @apply absolute left-0 top-0 bottom-0 w-1 sm:w-1.5;
+  @apply bg-gradient-to-b from-brand-600 to-brand-700;
+  @apply opacity-0 transition-opacity duration-300;
+}
+
+.metric-card:hover::after {
+  @apply opacity-100;
+}
+
+.metric-icon {
+  @apply text-4xl sm:text-5xl lg:text-6xl;
+}
+
+.metric-content {
+  @apply flex-1;
+}
+
+.metric-value {
+  @apply text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-none mb-1.5 sm:mb-2 tracking-tight;
+}
+
+.metric-label {
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply text-xs sm:text-sm lg:text-base font-semibold uppercase tracking-wider;
+}
+
+.metric-primary .metric-value {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.metric-danger .metric-value {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.metric-warning .metric-value {
+  @apply text-yellow-600 dark:text-yellow-400;
+}
+
+.metric-success .metric-value {
+  @apply text-brand-600 dark:text-brand-400;
+}
+
+/* ==================== PARALLAX BACKGROUND ==================== */
+.parallax-background {
+  @apply fixed inset-0 z-0 pointer-events-none overflow-hidden;
+  @apply bg-neutral-50 dark:bg-neutral-950;
+}
+
+.parallax-layer {
+  @apply absolute inset-0 will-change-transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.parallax-layer-back {
+  @apply -inset-[10%];
+}
+
+/* ==================== HISTORY PAGE SPECIFIC ==================== */
+.history-content {
+  @apply space-y-6 sm:space-y-8 lg:space-y-10;
+}
+
+.history-timeline {
+  @apply space-y-6 sm:space-y-8 lg:space-y-10;
+}
+
+.timeline-group {
+  @apply space-y-4 sm:space-y-6 lg:space-y-8;
+}
+
+.timeline-date {
+  @apply flex items-center justify-between gap-4;
+  @apply pb-3 sm:pb-4 lg:pb-5;
+  @apply border-b-2 border-brand-600 dark:border-brand-400;
+}
+
+.timeline-date h3 {
+  @apply text-xl sm:text-2xl lg:text-3xl font-bold;
+  @apply text-neutral-900 dark:text-neutral-50;
+}
+
+.timeline-date .count {
+  @apply text-sm sm:text-base lg:text-lg font-semibold;
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply bg-neutral-100 dark:bg-neutral-800;
+  @apply px-3 py-1.5 sm:px-4 sm:py-2 lg:px-5 lg:py-2.5;
+  @apply rounded-full;
+}
+
+.timeline-items {
+  @apply grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4;
+  @apply gap-4 sm:gap-6 lg:gap-8;
+}
+
+/* ==================== ANALYTICS PAGE SPECIFIC ==================== */
+.analytics-charts {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 xl:gap-10;
+  @apply mb-6 sm:mb-8 lg:mb-10;
+}
+
+.chart-card h3 {
+  @apply text-xl sm:text-2xl lg:text-3xl font-bold;
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply mb-4 sm:mb-5 lg:mb-6;
+}
+
+.chart-subtitle {
+  @apply text-sm sm:text-base lg:text-lg;
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply mb-4 sm:mb-5 lg:mb-6;
+}
+
+.chart-wide {
+  @apply lg:col-span-2;
+}
+
+.bar-chart {
+  @apply space-y-3 sm:space-y-4 lg:space-y-5;
+}
+
+.bar-item {
+  @apply space-y-2 sm:space-y-2.5;
+}
+
+.bar-label {
+  @apply flex justify-between items-center gap-3;
+  @apply text-sm sm:text-base lg:text-lg font-semibold;
+}
+
+.bar-value {
+  @apply text-brand-600 dark:text-brand-400 font-bold;
+}
+
+.bar-container {
+  @apply h-6 sm:h-8 lg:h-10 bg-neutral-100 dark:bg-neutral-800;
+  @apply rounded-full overflow-hidden;
+}
+
+.bar {
+  @apply h-full rounded-full;
+  @apply bg-gradient-to-r from-brand-600 to-brand-700;
+}
+
+.bar-rhino {
+  @apply bg-gradient-to-r from-green-600 to-green-700;
+}
+
+.bar-human {
+  @apply bg-gradient-to-r from-red-600 to-red-700;
+}
+
+.bar-vehicle {
+  @apply bg-gradient-to-r from-yellow-600 to-yellow-700;
+}
+
+.bar-zone {
+  @apply bg-gradient-to-r from-blue-600 to-blue-700;
+}
+
+.bar-status-confirmed {
+  @apply bg-gradient-to-r from-green-600 to-green-700;
+}
+
+.bar-status-threat {
+  @apply bg-gradient-to-r from-red-600 to-red-700;
+}
+
+.bar-status-investigating {
+  @apply bg-gradient-to-r from-yellow-600 to-yellow-700;
+}
+
+.class-tag {
+  @apply inline-block px-3 py-1.5 sm:px-4 sm:py-2;
+  @apply rounded-full text-xs sm:text-sm lg:text-base font-bold uppercase;
+}
+
+.class-rhino {
+  @apply bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400;
+}
+
+.class-human {
+  @apply bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400;
+}
+
+.class-vehicle {
+  @apply bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400;
+}
+
+.line-chart {
+  @apply flex items-end justify-between gap-1 sm:gap-2;
+  @apply h-[200px] sm:h-[250px] lg:h-[300px];
+}
+
+.line-bar {
+  @apply flex-1 flex flex-col items-center gap-2;
+}
+
+.line-bar-fill {
+  @apply w-full bg-gradient-to-t from-brand-600 to-brand-500;
+  @apply rounded-t-lg transition-all duration-500;
+  @apply hover:from-brand-700 hover:to-brand-600;
+  @apply cursor-pointer;
+}
+
+.line-bar-label {
+  @apply text-xs sm:text-sm text-neutral-600 dark:text-neutral-400;
+  @apply font-medium;
+}
+
+.analytics-footer {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 xl:gap-10;
+}
+
+.performance-card,
+.summary-card {
+  @apply bg-white/90 dark:bg-neutral-900/85;
+  @apply backdrop-blur-xl;
+  @apply p-5 sm:p-6 lg:p-8 xl:p-10;
+  @apply rounded-2xl sm:rounded-3xl lg:rounded-[2rem];
+  @apply shadow-lg shadow-black/5 dark:shadow-black/40;
+  @apply border-2 border-neutral-200/80 dark:border-white/5;
+}
+
+.performance-card h3,
+.summary-card h3 {
+  @apply text-xl sm:text-2xl lg:text-3xl font-bold;
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply mb-4 sm:mb-5 lg:mb-6;
+}
+
+.performance-meter {
+  @apply space-y-4 sm:space-y-5;
+}
+
+.meter-bar {
+  @apply h-8 sm:h-10 lg:h-12 bg-neutral-100 dark:bg-neutral-800;
+  @apply rounded-full overflow-hidden;
+}
+
+.meter-fill {
+  @apply h-full bg-gradient-to-r from-brand-600 to-brand-700;
+  @apply rounded-full;
+}
+
+.meter-value {
+  @apply text-4xl sm:text-5xl lg:text-6xl font-extrabold;
+  @apply text-brand-600 dark:text-brand-400;
+  @apply text-center;
+}
+
+.performance-note {
+  @apply text-sm sm:text-base lg:text-lg;
+  @apply text-neutral-600 dark:text-neutral-400;
+  @apply text-center;
+}
+
+.summary-list {
+  @apply space-y-3 sm:space-y-4;
+}
+
+.summary-list li {
+  @apply text-sm sm:text-base lg:text-lg;
+  @apply text-neutral-700 dark:text-neutral-300;
+  @apply flex items-start gap-3;
+}
+
+.summary-list li::before {
+  content: '•';
+  @apply text-brand-600 dark:text-brand-400;
+  @apply font-bold text-xl sm:text-2xl;
+  @apply flex-shrink-0;
+}
+
+.summary-list strong {
+  @apply text-neutral-900 dark:text-neutral-50;
+  @apply font-bold;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 992px) {
+  .dashboard-layout {
+    @apply grid-cols-1 grid-rows-[auto_1fr] h-auto;
+  }
+
+  .map-section {
+    @apply min-h-[400px] sm:min-h-[500px];
+  }
+
+  .dashboard-detections {
+    @apply max-h-[600px];
+  }
+
+  .alerts-container {
+    @apply right-4 left-4 max-w-none;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  @apply outline-2 outline-brand-600 outline-offset-2;
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden;
+  clip: rect(0, 0, 0, 0);
+  @apply whitespace-nowrap border-0;
+}
+
+/* Custom shadow utilities from design tokens */
+.shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+.shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+/* No scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
