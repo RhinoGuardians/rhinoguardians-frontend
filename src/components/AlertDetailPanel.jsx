@@ -6,6 +6,7 @@
  */
 
 import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import { FiX, FiMapPin, FiClock, FiUser, FiFileText, FiCheckCircle, FiAlertCircle } from 'react-icons/fi'
 import { format } from 'date-fns'
 import { useAlertRanger } from '../context/AlertRangerContext'
@@ -56,11 +57,34 @@ function TimelineItem({ status, label, timestamp, isCurrent = false }) {
 export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
   const { getAlertById } = useAlertRanger()
   const alert = getAlertById(alertId)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const handleChange = (event) => setIsDesktop(event.matches)
+
+    setIsDesktop(mq.matches)
+    mq.addEventListener('change', handleChange)
+
+    return () => mq.removeEventListener('change', handleChange)
+  }, [])
 
   if (!alert) return null
 
   const statusConfig = STATUS_CONFIG[alert.status]
   const severityConfig = SEVERITY_CONFIG[alert.severity]
+
+  const panelClasses = isDesktop
+    ? 'fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-slate-700 shadow-2xl z-50 flex flex-col'
+    : 'fixed inset-x-0 bottom-0 w-full max-w-full max-h-[100dvh] bg-slate-900 border-t border-slate-700 shadow-2xl z-50 flex flex-col rounded-t-3xl overflow-hidden'
+
+  const panelAnimation = isDesktop
+    ? { initial: { x: '100%' }, animate: { x: 0 }, exit: { x: '100%' } }
+    : { initial: { y: '100%' }, animate: { y: 0 }, exit: { y: '100%' } }
+
+  const panelStyle = isDesktop ? undefined : { top: 'env(safe-area-inset-top, 0px)' }
 
   return (
     <AnimatePresence>
@@ -77,40 +101,48 @@ export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
 
           {/* Panel */}
           <motion.div
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-slate-700 shadow-2xl z-50 flex flex-col"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            className={panelClasses}
+            style={panelStyle}
+            initial={panelAnimation.initial}
+            animate={panelAnimation.animate}
+            exit={panelAnimation.exit}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700 bg-slate-900">
-              <div>
-                <h2 className="text-xl font-bold text-white">Alert Details</h2>
-                <p className="text-sm text-slate-400">{formatAlertId(alert.id)}</p>
+            <div className="px-5 sm:px-6 pt-[calc(env(safe-area-inset-top,0)+1rem)] pb-4 border-b border-slate-700 bg-slate-900/95">
+              {!isDesktop && (
+                <div className="flex justify-center pb-3">
+                  <span className="h-1.5 w-12 rounded-full bg-slate-700" />
+                </div>
+              )}
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-white">Alert Details</h2>
+                  <p className="text-xs sm:text-sm text-slate-400">{formatAlertId(alert.id)}</p>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
+                >
+                  <FiX className="w-5 h-5 text-slate-300" />
+                </button>
               </div>
-              <button
-                onClick={onClose}
-                className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
-              >
-                <FiX className="w-5 h-5 text-slate-400" />
-              </button>
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto px-5 sm:px-6 py-6 space-y-6 sm:space-y-8 pb-[calc(env(safe-area-inset-bottom,0)+6rem)]">
               {/* Status & Severity */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 block">Status</label>
-                  <div className={'px-3 py-2 rounded-lg border font-semibold text-sm text-center ' +
+                  <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 block">Status</label>
+                  <div className={'px-3 py-2 rounded-lg border font-semibold text-sm sm:text-base text-center ' +
                     statusConfig.bgClass + ' ' + statusConfig.textClass + ' ' + statusConfig.borderClass}>
                     {statusConfig.label}
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 block">Severity</label>
-                  <div className={'px-3 py-2 rounded-lg border font-semibold text-sm text-center ' +
+                  <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 block">Severity</label>
+                  <div className={'px-3 py-2 rounded-lg border font-semibold text-sm sm:text-base text-center ' +
                     severityConfig.bgClass + ' ' + severityConfig.textClass + ' ' + severityConfig.borderClass}>
                     {severityConfig.label}
                   </div>
@@ -119,26 +151,26 @@ export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
 
               {/* Alert Type */}
               <div>
-                <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 block">Alert Type</label>
-                <p className="text-white font-medium capitalize">{alert.type.replace(/_/g, ' ')}</p>
+                <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 block">Alert Type</label>
+                <p className="text-white font-medium capitalize text-sm sm:text-base">{alert.type.replace(/_/g, ' ')}</p>
               </div>
 
               {/* Location */}
               <div>
-                <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
                   <FiMapPin className="w-3 h-3" />
                   Location
                 </label>
                 <div className="bg-slate-800 rounded-lg p-3 space-y-2">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xs text-slate-400">GPS:</span>
-                    <span className="text-white font-mono text-sm">
+                    <span className="text-[11px] sm:text-xs text-slate-400">GPS:</span>
+                    <span className="text-white font-mono text-xs sm:text-sm">
                       {alert.location.lat?.toFixed(6)}, {alert.location.lng?.toFixed(6)}
                     </span>
                   </div>
                   {alert.location.zoneLabel && (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs text-slate-400">Zone:</span>
+                      <span className="text-[11px] sm:text-xs text-slate-400">Zone:</span>
                       <span className="text-white text-sm">{alert.location.zoneLabel}</span>
                     </div>
                   )}
@@ -146,19 +178,19 @@ export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
               </div>
 
               {/* Timestamps */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                  <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
                     <FiClock className="w-3 h-3" />
                     Created
                   </label>
-                  <p className="text-white text-sm font-mono">
+                  <p className="text-white text-xs sm:text-sm font-mono">
                     {alert.createdAt ? format(new Date(alert.createdAt), 'MMM d, HH:mm:ss') : 'Unknown'}
                   </p>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 block">Updated</label>
-                  <p className="text-white text-sm font-mono">
+                  <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 block">Updated</label>
+                  <p className="text-white text-xs sm:text-sm font-mono">
                     {alert.updatedAt ? format(new Date(alert.updatedAt), 'MMM d, HH:mm:ss') : 'Unknown'}
                   </p>
                 </div>
@@ -166,30 +198,30 @@ export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
 
               {/* Created By */}
               <div>
-                <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
                   <FiUser className="w-3 h-3" />
                   Created By
                 </label>
-                <p className="text-white font-medium">{alert.createdBy}</p>
+                <p className="text-white font-medium text-sm sm:text-base">{alert.createdBy}</p>
               </div>
 
               {/* Notes */}
               {alert.notes && (
                 <div>
-                  <label className="text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                  <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-2">
                     <FiFileText className="w-3 h-3" />
                     Notes
                   </label>
                   <div className="bg-slate-800 rounded-lg p-3">
-                    <p className="text-white text-sm leading-relaxed">{alert.notes}</p>
+                    <p className="text-white text-sm sm:text-base leading-relaxed">{alert.notes}</p>
                   </div>
                 </div>
               )}
 
               {/* Timeline */}
               <div>
-                <label className="text-xs text-slate-500 uppercase tracking-wide mb-4 block">Alert Timeline</label>
-                <div className="space-y-0">
+                <label className="text-[11px] sm:text-xs text-slate-500 uppercase tracking-wide mb-4 block">Alert Timeline</label>
+                <div className="space-y-4 sm:space-y-5">
                   <TimelineItem
                     status={AlertStatus.CREATED}
                     label="Alert Created"
@@ -243,10 +275,10 @@ export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
                 <div className="px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-red-300 font-semibold text-sm">
+                    <p className="text-red-300 font-semibold text-sm sm:text-base">
                       {alert.status === AlertStatus.FAILED ? 'Delivery Failed' : 'No Acknowledgment'}
                     </p>
-                    <p className="text-red-400 text-xs mt-1">
+                    <p className="text-red-400 text-xs sm:text-sm mt-1">
                       {alert.status === AlertStatus.FAILED
                         ? 'Alert delivery failed. Escalate manually via radio or direct contact.'
                         : 'No ranger acknowledgment received. Possible communication failure. Verify manually.'}
@@ -264,13 +296,16 @@ export default function AlertDetailPanel({ alertId, isOpen, onClose }) {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-slate-700 bg-slate-900">
+            <div className="px-5 sm:px-6 py-4 border-t border-slate-700 bg-slate-900/95 pb-[calc(env(safe-area-inset-bottom,0)+1rem)]">
               <button
                 onClick={onClose}
-                className="w-full px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-white font-medium transition-colors"
+                className="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg text-white font-medium transition-colors"
               >
                 Close
               </button>
+              <div className="pt-2 text-center text-xs text-slate-500">
+                Press Esc or tap outside to dismiss
+              </div>
             </div>
           </motion.div>
         </>
