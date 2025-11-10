@@ -61,19 +61,19 @@ export default function Analytics({ onAlert }) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">
           Analytics Dashboard
         </h1>
-        <p className="text-slate-400">
+        <p className="text-sm md:text-base text-slate-400">
           Statistical insights and detection patterns
         </p>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4 sm:gap-5">
         {[
-          { 
-            label: 'Total Detections', 
+          {
+            label: 'Total Detections',
             value: analytics.totalDetections, 
             icon: FiActivity, 
             color: 'blue',
@@ -106,20 +106,20 @@ export default function Analytics({ onAlert }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-slate-900/50 border border-white/10 rounded-xl p-6 backdrop-blur-sm"
+            className="bg-slate-900/50 border border-white/10 rounded-xl p-5 sm:p-6 backdrop-blur-sm"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className={'p-3 rounded-lg bg-' + metric.color + '-500/20'}>
-                <metric.icon className={'w-6 h-6 text-' + metric.color + '-400'} />
+              <div className={'p-2.5 sm:p-3 rounded-lg bg-' + metric.color + '-500/20'}>
+                <metric.icon className={'w-5 h-5 sm:w-6 sm:h-6 text-' + metric.color + '-400'} />
               </div>
               <span className={'text-xs font-medium px-2 py-1 rounded-full ' + (metric.change.startsWith('+') ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300')}>
                 {metric.change}
               </span>
             </div>
-            <div className="text-3xl font-bold text-white mb-1">
+            <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
               {metric.value}
             </div>
-            <div className="text-sm text-slate-400">
+            <div className="text-xs sm:text-sm text-slate-400">
               {metric.label}
             </div>
           </motion.div>
@@ -127,84 +127,88 @@ export default function Analytics({ onAlert }) {
       </div>
 
       {/* Charts and Heatmap */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Detection Heatmap */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Detection Heatmap</h2>
-          <div className="h-80">
-            <Map detections={detections} className="h-full" />
+      <div className="space-y-6">
+        <div className="grid grid-flow-col auto-cols-[minmax(18rem,1fr)] gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-2 px-2 sm:mx-0 sm:px-0 lg:grid lg:grid-flow-row lg:grid-cols-2 lg:gap-6 lg:overflow-visible lg:snap-none lg:pb-0">
+          {/* Detection Heatmap */}
+          <div className="snap-center min-w-[18rem] lg:min-w-0 bg-slate-900/50 border border-white/10 rounded-xl p-5 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Detection Heatmap</h2>
+            <div className="h-72 sm:h-80">
+              <Map detections={detections} className="h-full" />
+            </div>
+          </div>
+
+          {/* Top Detection Classes */}
+          <div className="snap-center min-w-[18rem] lg:min-w-0 bg-slate-900/50 border border-white/10 rounded-xl p-5 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Top Detection Classes</h2>
+            <div className="space-y-3 sm:space-y-4">
+              {topClasses.map(([className, count], i) => {
+                const percentage = (count / analytics.totalDetections * 100).toFixed(1)
+                const isRhino = className?.toLowerCase().includes('rhino')
+                const isThreat = className?.toLowerCase().includes('human') || className?.toLowerCase().includes('poacher')
+
+                return (
+                  <motion.div
+                    key={className}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-white">{className}</span>
+                      <span className="text-xs sm:text-sm text-slate-400">{count} ({percentage}%)</span>
+                    </div>
+                    <div className="w-full bg-slate-800 rounded-full h-2">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: percentage + '%' }}
+                        transition={{ delay: i * 0.1 + 0.2, duration: 0.5 }}
+                        className={'h-full rounded-full ' + (isRhino ? 'bg-emerald-500' : isThreat ? 'bg-red-500' : 'bg-blue-500')}
+                      />
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Top Detection Classes */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Top Detection Classes</h2>
-          <div className="space-y-4">
-            {topClasses.map(([className, count], i) => {
-              const percentage = (count / analytics.totalDetections * 100).toFixed(1)
-              const isRhino = className?.toLowerCase().includes('rhino')
-              const isThreat = className?.toLowerCase().includes('human') || className?.toLowerCase().includes('poacher')
-              
-              return (
+        <div className="grid grid-flow-col auto-cols-[minmax(18rem,1fr)] gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-2 px-2 sm:mx-0 sm:px-0 lg:grid lg:grid-flow-row lg:grid-cols-2 lg:gap-6 lg:overflow-visible lg:snap-none lg:pb-0">
+          {/* Peak Activity Hours */}
+          <div className="snap-center min-w-[18rem] lg:min-w-0 bg-slate-900/50 border border-white/10 rounded-xl p-5 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Peak Activity Hours</h2>
+            <div className="space-y-3 sm:space-y-4">
+              {hourlyPeaks.map(([hour, count], i) => (
                 <motion.div
-                  key={className}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  key={hour}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
+                  className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-white">{className}</span>
-                    <span className="text-sm text-slate-400">{count} ({percentage}%)</span>
+                  <div>
+                    <div className="text-base sm:text-lg font-bold text-white">{hour}:00 - {parseInt(hour) + 1}:00</div>
+                    <div className="text-xs sm:text-sm text-slate-400">{count} detections</div>
                   </div>
-                  <div className="w-full bg-slate-800 rounded-full h-2">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: percentage + '%' }}
-                      transition={{ delay: i * 0.1 + 0.2, duration: 0.5 }}
-                      className={'h-full rounded-full ' + (isRhino ? 'bg-emerald-500' : isThreat ? 'bg-red-500' : 'bg-blue-500')}
-                    />
-                  </div>
+                  <div className="text-xl sm:text-2xl font-bold text-emerald-400">#{i + 1}</div>
                 </motion.div>
-              )
-            })}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Peak Activity Hours */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Peak Activity Hours</h2>
-          <div className="space-y-4">
-            {hourlyPeaks.map(([hour, count], i) => (
-              <motion.div
-                key={hour}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg"
-              >
-                <div>
-                  <div className="text-lg font-bold text-white">{hour}:00 - {parseInt(hour) + 1}:00</div>
-                  <div className="text-sm text-slate-400">{count} detections</div>
-                </div>
-                <div className="text-2xl font-bold text-emerald-400">#{i + 1}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Summary Card */}
-        <div className="bg-gradient-to-br from-emerald-600/20 to-blue-600/20 border border-emerald-500/30 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Summary</h2>
-          <div className="space-y-3">
-            <p className="text-slate-300">
-              Over the past monitoring period, the system has detected <span className="text-emerald-400 font-bold">{analytics.rhinoCount} rhinos</span> and identified <span className="text-red-400 font-bold">{analytics.threatCount} potential threats</span>.
-            </p>
-            <p className="text-slate-300">
-              The average detection confidence is <span className="text-blue-400 font-bold">{analytics.avgConfidence}%</span>, indicating high accuracy in classification.
-            </p>
-            <p className="text-slate-300">
-              Most activity occurs during {hourlyPeaks[0] && hourlyPeaks[0][0] + ':00'} with {hourlyPeaks[0] && hourlyPeaks[0][1]} detections.
-            </p>
+          {/* Summary Card */}
+          <div className="snap-center min-w-[18rem] lg:min-w-0 bg-gradient-to-br from-emerald-600/20 to-blue-600/20 border border-emerald-500/30 rounded-xl p-5 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Summary</h2>
+            <div className="space-y-2.5 sm:space-y-3 text-sm sm:text-base text-slate-300">
+              <p>
+                Over the past monitoring period, the system has detected <span className="text-emerald-400 font-bold">{analytics.rhinoCount} rhinos</span> and identified <span className="text-red-400 font-bold">{analytics.threatCount} potential threats</span>.
+              </p>
+              <p>
+                The average detection confidence is <span className="text-blue-400 font-bold">{analytics.avgConfidence}%</span>, indicating high accuracy in classification.
+              </p>
+              <p>
+                Most activity occurs during {hourlyPeaks[0] && hourlyPeaks[0][0] + ':00'} with {hourlyPeaks[0] && hourlyPeaks[0][1]} detections.
+              </p>
+            </div>
           </div>
         </div>
       </div>
