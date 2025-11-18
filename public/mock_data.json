@@ -1,0 +1,464 @@
+{
+  "detections": [
+    {
+      "id": "det_001",
+      "class_name": "rhino",
+      "confidence": 0.94,
+      "gps_lat": -23.8859,
+      "gps_lng": 31.5205,
+      "timestamp": "2025-11-18T06:23:45Z",
+      "image_path": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=400&h=300&fit=crop",
+      "zone": "North Sector"
+    },
+    {
+      "id": "det_002",
+      "class_name": "rhino",
+      "confidence": 0.89,
+      "gps_lat": -23.8912,
+      "gps_lng": 31.5318,
+      "timestamp": "2025-11-18T06:45:12Z",
+      "image_path": "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&h=300&fit=crop",
+      "zone": "North Sector"
+    },
+    {
+      "id": "det_003",
+      "class_name": "poacher",
+      "confidence": 0.87,
+      "gps_lat": -23.8945,
+      "gps_lng": 31.541,
+      "timestamp": "2025-11-18T07:12:33Z",
+      "image_path": "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=400&h=300&fit=crop",
+      "zone": "Zone A"
+    },
+    {
+      "id": "det_004",
+      "class_name": "vehicle",
+      "confidence": 0.92,
+      "gps_lat": -23.8823,
+      "gps_lng": 31.5289,
+      "timestamp": "2025-11-18T07:34:21Z",
+      "image_path": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop",
+      "zone": "West Boundary"
+    },
+    {
+      "id": "det_005",
+      "class_name": "rhino",
+      "confidence": 0.96,
+      "gps_lat": -23.8901,
+      "gps_lng": 31.5356,
+      "timestamp": "2025-11-18T08:01:45Z",
+      "image_path": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=400&h=300&fit=crop&q=80",
+      "zone": "Central Reserve"
+    },
+    {
+      "id": "det_006",
+      "class_name": "poacher",
+      "confidence": 0.91,
+      "gps_lat": -23.8967,
+      "gps_lng": 31.5467,
+      "timestamp": "2025-11-18T08:23:11Z",
+      "image_path": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=300&fit=crop",
+      "zone": "Zone B"
+    },
+    {
+      "id": "det_007",
+      "class_name": "rhino",
+      "confidence": 0.88,
+      "gps_lat": -23.8834,
+      "gps_lng": 31.5198,
+      "timestamp": "2025-11-18T08:45:09Z",
+      "image_path": "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&h=300&fit=crop&q=85",
+      "zone": "North Sector"
+    },
+    {
+      "id": "det_008",
+      "class_name": "vehicle",
+      "confidence": 0.85,
+      "gps_lat": -23.8978,
+      "gps_lng": 31.5512,
+      "timestamp": "2025-11-18T09:12:34Z",
+      "image_path": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=300&fit=crop",
+      "zone": "East Perimeter"
+    },
+    {
+      "id": "det_009",
+      "class_name": "human",
+      "confidence": 0.82,
+      "gps_lat": -23.8890,
+      "gps_lng": 31.5245,
+      "timestamp": "2025-11-18T09:34:56Z",
+      "image_path": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=300&fit=crop",
+      "zone": "Ranger Patrol Route"
+    },
+    {
+      "id": "det_010",
+      "class_name": "rhino",
+      "confidence": 0.93,
+      "gps_lat": -23.8845,
+      "gps_lng": 31.5412,
+      "timestamp": "2025-11-18T10:02:18Z",
+      "image_path": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=400&h=300&fit=crop&q=75",
+      "zone": "Central Reserve"
+    },
+    {
+      "id": "det_011",
+      "class_name": "poacher",
+      "confidence": 0.95,
+      "gps_lat": -23.8923,
+      "gps_lng": 31.5378,
+      "timestamp": "2025-11-18T10:15:42Z",
+      "image_path": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+      "zone": "Zone A"
+    },
+    {
+      "id": "det_012",
+      "class_name": "rhino",
+      "confidence": 0.91,
+      "gps_lat": -23.8812,
+      "gps_lng": 31.5167,
+      "timestamp": "2025-11-18T10:42:31Z",
+      "image_path": "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&h=300&fit=crop&q=90",
+      "zone": "North Sector"
+    },
+    {
+      "id": "det_013",
+      "class_name": "vehicle",
+      "confidence": 0.88,
+      "gps_lat": -23.8956,
+      "gps_lng": 31.5489,
+      "timestamp": "2025-11-18T11:05:22Z",
+      "image_path": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop",
+      "zone": "East Perimeter"
+    },
+    {
+      "id": "det_014",
+      "class_name": "rhino",
+      "confidence": 0.97,
+      "gps_lat": -23.8867,
+      "gps_lng": 31.5223,
+      "timestamp": "2025-11-18T11:28:14Z",
+      "image_path": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=400&h=300&fit=crop&q=95",
+      "zone": "North Sector"
+    },
+    {
+      "id": "det_015",
+      "class_name": "poacher",
+      "confidence": 0.89,
+      "gps_lat": -23.8934,
+      "gps_lng": 31.5445,
+      "timestamp": "2025-11-18T11:52:09Z",
+      "image_path": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=300&fit=crop",
+      "zone": "Zone B - Near Waterhole"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "RG-101",
+      "detection_id": "det_003",
+      "type": "poacher_suspected",
+      "severity": "critical",
+      "status": "resolved",
+      "location": {
+        "lat": -23.8945,
+        "lng": 31.541,
+        "zoneLabel": "Zone A"
+      },
+      "created_at": "2025-11-18T07:13:00Z",
+      "updated_at": "2025-11-18T08:45:00Z",
+      "created_by": "Operator 1",
+      "notes": "Single individual spotted near northern boundary. Armed with what appears to be rifle.",
+      "acknowledged_at": "2025-11-18T07:15:30Z",
+      "in_progress_at": "2025-11-18T07:18:00Z",
+      "resolved_at": "2025-11-18T08:45:00Z",
+      "ranger_assigned": "Ranger Alpha Team",
+      "resolution_notes": "False alarm - confirmed as authorized park ranger on patrol. Identity verified.",
+      "delivery_channel_status": ["sms_delivered", "radio_confirmed"]
+    },
+    {
+      "id": "RG-102",
+      "detection_id": "det_006",
+      "type": "poacher_suspected",
+      "severity": "critical",
+      "status": "in_progress",
+      "location": {
+        "lat": -23.8967,
+        "lng": 31.5467,
+        "zoneLabel": "Zone B"
+      },
+      "created_at": "2025-11-18T08:24:00Z",
+      "updated_at": "2025-11-18T08:30:00Z",
+      "created_by": "Operator 1",
+      "notes": "High-confidence poacher detection. Individual on foot near rhino congregation area.",
+      "acknowledged_at": "2025-11-18T08:26:00Z",
+      "in_progress_at": "2025-11-18T08:30:00Z",
+      "resolved_at": null,
+      "ranger_assigned": "Ranger Bravo Team",
+      "delivery_channel_status": ["sms_delivered", "radio_confirmed"],
+      "ranger_eta": "12 minutes",
+      "ranger_distance": "2.3 km"
+    },
+    {
+      "id": "RG-103",
+      "detection_id": "det_008",
+      "type": "vehicle_suspected",
+      "severity": "high",
+      "status": "acknowledged",
+      "location": {
+        "lat": -23.8978,
+        "lng": 31.5512,
+        "zoneLabel": "East Perimeter"
+      },
+      "created_at": "2025-11-18T09:13:00Z",
+      "updated_at": "2025-11-18T09:16:00Z",
+      "created_by": "Operator 2",
+      "notes": "Unidentified vehicle detected near eastern boundary fence. Possible breach attempt.",
+      "acknowledged_at": "2025-11-18T09:16:00Z",
+      "in_progress_at": null,
+      "resolved_at": null,
+      "ranger_assigned": "Ranger Charlie Team",
+      "delivery_channel_status": ["sms_delivered", "radio_pending"]
+    },
+    {
+      "id": "RG-104",
+      "detection_id": "det_011",
+      "type": "poacher_suspected",
+      "severity": "critical",
+      "status": "sent",
+      "location": {
+        "lat": -23.8923,
+        "lng": 31.5378,
+        "zoneLabel": "Zone A"
+      },
+      "created_at": "2025-11-18T10:16:00Z",
+      "updated_at": "2025-11-18T10:16:00Z",
+      "created_by": "Operator 1",
+      "notes": "URGENT: Individual detected near recent poaching activity site. High threat level.",
+      "acknowledged_at": null,
+      "in_progress_at": null,
+      "resolved_at": null,
+      "ranger_assigned": null,
+      "delivery_channel_status": ["sms_pending", "radio_pending"]
+    },
+    {
+      "id": "RG-105",
+      "detection_id": "det_013",
+      "type": "vehicle_suspected",
+      "severity": "medium",
+      "status": "sent",
+      "location": {
+        "lat": -23.8956,
+        "lng": 31.5489,
+        "zoneLabel": "East Perimeter"
+      },
+      "created_at": "2025-11-18T11:06:00Z",
+      "updated_at": "2025-11-18T11:06:00Z",
+      "created_by": "Operator 2",
+      "notes": "Vehicle movement detected. Monitoring for pattern.",
+      "acknowledged_at": null,
+      "in_progress_at": null,
+      "resolved_at": null,
+      "ranger_assigned": null,
+      "delivery_channel_status": ["sms_pending"]
+    },
+    {
+      "id": "RG-106",
+      "detection_id": "det_015",
+      "type": "poacher_suspected",
+      "severity": "critical",
+      "status": "created",
+      "location": {
+        "lat": -23.8934,
+        "lng": 31.5445,
+        "zoneLabel": "Zone B - Near Waterhole"
+      },
+      "created_at": "2025-11-18T11:52:30Z",
+      "updated_at": "2025-11-18T11:52:30Z",
+      "created_by": "Operator 1",
+      "notes": "Individual approaching waterhole where rhinos gather. Immediate response required.",
+      "acknowledged_at": null,
+      "in_progress_at": null,
+      "resolved_at": null,
+      "ranger_assigned": null,
+      "delivery_channel_status": []
+    }
+  ],
+  "rangers": [
+    {
+      "id": "ranger_alpha",
+      "name": "Ranger Alpha Team",
+      "team_lead": "Themba Ndlovu",
+      "status": "on_patrol",
+      "gps_lat": -23.8935,
+      "gps_lng": 31.5421,
+      "last_update": "2025-11-18T11:55:00Z",
+      "assigned_alert": null,
+      "vehicle": "Patrol Truck Alpha-1"
+    },
+    {
+      "id": "ranger_bravo",
+      "name": "Ranger Bravo Team",
+      "team_lead": "Sarah Mitchell",
+      "status": "responding",
+      "gps_lat": -23.8951,
+      "gps_lng": 31.5443,
+      "last_update": "2025-11-18T11:54:00Z",
+      "assigned_alert": "RG-102",
+      "vehicle": "Patrol Truck Bravo-2",
+      "heading": 127,
+      "speed_kmh": 35
+    },
+    {
+      "id": "ranger_charlie",
+      "name": "Ranger Charlie Team",
+      "team_lead": "John Khumalo",
+      "status": "acknowledged",
+      "gps_lat": -23.8889,
+      "gps_lng": 31.5478,
+      "last_update": "2025-11-18T11:53:00Z",
+      "assigned_alert": "RG-103",
+      "vehicle": "ATV Charlie-3"
+    },
+    {
+      "id": "ranger_delta",
+      "name": "Ranger Delta Team",
+      "team_lead": "Maria Santos",
+      "status": "at_base",
+      "gps_lat": -23.8850,
+      "gps_lng": 31.5250,
+      "last_update": "2025-11-18T11:52:00Z",
+      "assigned_alert": null,
+      "vehicle": "Patrol Truck Delta-4"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone_a",
+      "name": "Zone A",
+      "type": "high_risk",
+      "boundary": [
+        [-23.8900, 31.5350],
+        [-23.8950, 31.5350],
+        [-23.8950, 31.5450],
+        [-23.8900, 31.5450]
+      ],
+      "alert_count": 2,
+      "rhino_population": 12
+    },
+    {
+      "id": "zone_b",
+      "name": "Zone B",
+      "type": "high_risk",
+      "boundary": [
+        [-23.8950, 31.5400],
+        [-23.9000, 31.5400],
+        [-23.9000, 31.5500],
+        [-23.8950, 31.5500]
+      ],
+      "alert_count": 2,
+      "rhino_population": 8
+    },
+    {
+      "id": "north_sector",
+      "name": "North Sector",
+      "type": "protected",
+      "boundary": [
+        [-23.8800, 31.5100],
+        [-23.8900, 31.5100],
+        [-23.8900, 31.5300],
+        [-23.8800, 31.5300]
+      ],
+      "alert_count": 0,
+      "rhino_population": 15
+    }
+  ],
+  "analytics": {
+    "total_detections_today": 15,
+    "rhino_detections": 8,
+    "threat_detections": 7,
+    "active_alerts": 4,
+    "resolved_alerts_today": 1,
+    "average_response_time_minutes": 8.5,
+    "rangers_on_duty": 4,
+    "threat_level": "elevated"
+  },
+  "timeline": [
+    {
+      "timestamp": "2025-11-18T07:13:00Z",
+      "event": "alert_created",
+      "alert_id": "RG-101",
+      "description": "Poacher alert created in Zone A"
+    },
+    {
+      "timestamp": "2025-11-18T07:15:30Z",
+      "event": "alert_acknowledged",
+      "alert_id": "RG-101",
+      "ranger": "Ranger Alpha Team",
+      "description": "Alert acknowledged by Ranger Alpha Team"
+    },
+    {
+      "timestamp": "2025-11-18T07:18:00Z",
+      "event": "ranger_dispatched",
+      "alert_id": "RG-101",
+      "ranger": "Ranger Alpha Team",
+      "description": "Ranger Alpha Team en route to Zone A"
+    },
+    {
+      "timestamp": "2025-11-18T08:45:00Z",
+      "event": "alert_resolved",
+      "alert_id": "RG-101",
+      "ranger": "Ranger Alpha Team",
+      "description": "Confirmed as authorized personnel. Situation resolved."
+    },
+    {
+      "timestamp": "2025-11-18T08:24:00Z",
+      "event": "alert_created",
+      "alert_id": "RG-102",
+      "description": "High-priority poacher alert in Zone B"
+    },
+    {
+      "timestamp": "2025-11-18T08:26:00Z",
+      "event": "alert_acknowledged",
+      "alert_id": "RG-102",
+      "ranger": "Ranger Bravo Team",
+      "description": "Alert acknowledged by Ranger Bravo Team"
+    },
+    {
+      "timestamp": "2025-11-18T08:30:00Z",
+      "event": "ranger_dispatched",
+      "alert_id": "RG-102",
+      "ranger": "Ranger Bravo Team",
+      "description": "Ranger Bravo Team responding to Zone B. ETA 12 minutes."
+    },
+    {
+      "timestamp": "2025-11-18T09:13:00Z",
+      "event": "alert_created",
+      "alert_id": "RG-103",
+      "description": "Vehicle detected at East Perimeter"
+    },
+    {
+      "timestamp": "2025-11-18T09:16:00Z",
+      "event": "alert_acknowledged",
+      "alert_id": "RG-103",
+      "ranger": "Ranger Charlie Team",
+      "description": "Alert acknowledged by Ranger Charlie Team"
+    },
+    {
+      "timestamp": "2025-11-18T10:16:00Z",
+      "event": "alert_created",
+      "alert_id": "RG-104",
+      "description": "URGENT: Critical poacher alert in Zone A"
+    },
+    {
+      "timestamp": "2025-11-18T11:06:00Z",
+      "event": "alert_created",
+      "alert_id": "RG-105",
+      "description": "Vehicle movement detected at East Perimeter"
+    },
+    {
+      "timestamp": "2025-11-18T11:52:30Z",
+      "event": "alert_created",
+      "alert_id": "RG-106",
+      "description": "Critical: Poacher approaching waterhole in Zone B"
+    }
+  ]
+}
