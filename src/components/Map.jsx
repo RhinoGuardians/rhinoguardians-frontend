@@ -278,6 +278,14 @@ export default function Map({
     return () => cancelAnimationFrame(frame)
   }, [center, zoom, detections.length])
 
+  useEffect(() => {
+    if (mapRef.current) {
+      requestAnimationFrame(() => {
+        mapRef.current?.invalidateSize()
+      })
+    }
+  }, [])
+
   return (
     <>
       <motion.div
@@ -297,12 +305,7 @@ export default function Map({
           zoom={zoom}
           className="h-full w-full"
           zoomControl={true}
-          whenCreated={(map) => {
-            mapRef.current = map
-            requestAnimationFrame(() => {
-              map.invalidateSize()
-            })
-          }}
+          ref={mapRef}
         >
           <MapController center={center} zoom={zoom} />
 
