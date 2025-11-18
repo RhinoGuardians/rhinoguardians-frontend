@@ -13,6 +13,11 @@
 
 import api from '../api/client'
 import {
+  getMockAlerts,
+  getMockRangers,
+  createMockAlert as createMockAlertData
+} from '../api/mockData'
+import {
   AlertStatus,
   AlertSeverity,
   deriveAlertType,
@@ -20,6 +25,8 @@ import {
   deriveAlertSource,
   generateAlertId
 } from '../types/alert'
+
+const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true'
 
 /**
  * Feature flags for graceful degradation
@@ -62,6 +69,13 @@ export const triggerAlert = async (detection, overrides = {}) => {
     createdBy: overrides.createdBy || 'Operator 1'
   }
 
+  // Use mock data if configured
+  if (USE_MOCK_DATA) {
+    console.log('[AlertRangerService] Using mock alert creation (VITE_USE_MOCK_DATA=true)')
+    const mockAlert = await createMockAlertData(payload)
+    return normalizeAlert(mockAlert)
+  }
+
   try {
     console.log('[AlertRangerService] Triggering alert:', payload)
 
@@ -79,7 +93,8 @@ export const triggerAlert = async (detection, overrides = {}) => {
     if (error.message.includes('404') || error.message.includes('No response')) {
       // Return mock alert for development/demo
       console.warn('[AlertRangerService] Backend not available, creating local mock alert')
-      return createMockAlert(detection, overrides)
+      const mockAlert = await createMockAlertData(payload)
+      return normalizeAlert(mockAlert)
     }
 
     throw error
@@ -93,6 +108,13 @@ export const triggerAlert = async (detection, overrides = {}) => {
  * @returns {Promise<Array>} List of alerts
  */
 export const fetchAlerts = async (filters = {}) => {
+  // Use mock data if configured
+  if (USE_MOCK_DATA) {
+    console.log('[AlertRangerService] Using mock alerts (VITE_USE_MOCK_DATA=true)')
+    const mockAlerts = await getMockAlerts(filters)
+    return mockAlerts.map(normalizeAlert)
+  }
+
   try {
     const params = {
       limit: filters.limit || 50,
@@ -113,8 +135,9 @@ export const fetchAlerts = async (filters = {}) => {
 
     // Graceful degradation
     if (error.message.includes('404') || error.message.includes('No response')) {
-      console.warn('[AlertRangerService] Backend not available, returning empty list')
-      return []
+      console.warn('[AlertRangerService] Backend not available, using mock alerts')
+      const mockAlerts = await getMockAlerts(filters)
+      return mockAlerts.map(normalizeAlert)
     }
 
     throw error
@@ -154,6 +177,12 @@ export const fetchRangerPositions = async () => {
     return []
   }
 
+  // Use mock data if configured
+  if (USE_MOCK_DATA) {
+    console.log('[AlertRangerService] Using mock ranger positions (VITE_USE_MOCK_DATA=true)')
+    return await getMockRangers()
+  }
+
   try {
     console.log('[AlertRangerService] Fetching ranger positions')
 
@@ -168,8 +197,8 @@ export const fetchRangerPositions = async () => {
 
     // Graceful degradation
     if (error.message.includes('404')) {
-      console.warn('[AlertRangerService] Ranger positions endpoint not implemented')
-      return []
+      console.warn('[AlertRangerService] Ranger positions endpoint not implemented, using mock data')
+      return await getMockRangers()
     }
 
     return []
@@ -206,37 +235,6 @@ const normalizeAlert = (rawAlert) => {
   }
 }
 
-/**
- * Create a mock alert for development when backend is unavailable
- *
- * This allows the frontend to function with full UI/UX even without backend
- */
-const createMockAlert = (detection, overrides = {}) => {
-  const alertId = generateAlertId()
-
-  return {
-    id: alertId,
-    detectionId: detection.id,
-    source: overrides.source || deriveAlertSource(detection),
-    type: overrides.type || deriveAlertType(detection.class_name),
-    severity: overrides.severity || deriveAlertSeverity(detection),
-    status: AlertStatus.SENT,
-    location: {
-      lat: detection.gps_lat,
-      lng: detection.gps_lng,
-      zoneLabel: overrides.zoneLabel || null
-    },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    createdBy: overrides.createdBy || 'Operator 1',
-    notes: overrides.notes || '',
-    deliveryChannelStatus: ['sms_pending'],
-    acknowledgedAt: null,
-    resolvedAt: null,
-    rangerAssigned: null,
-    _isMock: true // Flag for debugging
-  }
-}
 
 /**
  * Check if alert feature is enabled

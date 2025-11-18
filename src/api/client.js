@@ -1,6 +1,14 @@
 import axios from 'axios'
+import {
+  getMockDetections,
+  getMockAlerts,
+  getMockAnalytics,
+  getMockRangers,
+  createMockAlert
+} from './mockData'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true'
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -30,7 +38,7 @@ api.interceptors.response.use(
   },
   (error) => {
     console.error('API Response Error:', error.response?.status, error.message)
-    
+
     if (error.response) {
       // Server responded with error
       throw new Error('Server error: ' + error.response.status + ' ' + (error.response.data?.message || ''))
@@ -48,12 +56,18 @@ api.interceptors.response.use(
  * Fetch all detections with optional filters
  */
 export const fetchDetections = async (filters = {}) => {
+  // Use mock data if configured or if backend is unavailable
+  if (USE_MOCK_DATA) {
+    console.log('[API Client] Using mock detections (VITE_USE_MOCK_DATA=true)')
+    return await getMockDetections()
+  }
+
   try {
     const response = await api.get('/detections/', { params: filters })
     return response.data.detections || response.data
   } catch (error) {
-    console.error('Failed to fetch detections:', error)
-    throw error
+    console.warn('[API Client] Backend unavailable, falling back to mock detections')
+    return await getMockDetections()
   }
 }
 
@@ -70,7 +84,7 @@ export const uploadImage = async (file, gpsLat, gpsLng) => {
     const response = await api.post('/upload/', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
-    
+
     return response.data
   } catch (error) {
     console.error('Failed to upload image:', error)
@@ -82,12 +96,18 @@ export const uploadImage = async (file, gpsLat, gpsLng) => {
  * Fetch alerts
  */
 export const fetchAlerts = async (limit = 20) => {
+  // Use mock data if configured or if backend is unavailable
+  if (USE_MOCK_DATA) {
+    console.log('[API Client] Using mock alerts (VITE_USE_MOCK_DATA=true)')
+    return await getMockAlerts({ limit })
+  }
+
   try {
     const response = await api.get('/alerts/', { params: { limit } })
     return response.data.alerts || response.data
   } catch (error) {
-    console.error('Failed to fetch alerts:', error)
-    throw error
+    console.warn('[API Client] Backend unavailable, falling back to mock alerts')
+    return await getMockAlerts({ limit })
   }
 }
 
@@ -95,12 +115,37 @@ export const fetchAlerts = async (limit = 20) => {
  * Fetch analytics data
  */
 export const fetchAnalytics = async () => {
+  // Use mock data if configured or if backend is unavailable
+  if (USE_MOCK_DATA) {
+    console.log('[API Client] Using mock analytics (VITE_USE_MOCK_DATA=true)')
+    return await getMockAnalytics()
+  }
+
   try {
     const response = await api.get('/analytics/')
     return response.data
   } catch (error) {
-    console.error('Failed to fetch analytics:', error)
-    throw error
+    console.warn('[API Client] Backend unavailable, falling back to mock analytics')
+    return await getMockAnalytics()
+  }
+}
+
+/**
+ * Fetch ranger positions
+ */
+export const fetchRangerPositions = async () => {
+  // Use mock data if configured or if backend is unavailable
+  if (USE_MOCK_DATA) {
+    console.log('[API Client] Using mock rangers (VITE_USE_MOCK_DATA=true)')
+    return await getMockRangers()
+  }
+
+  try {
+    const response = await api.get('/rangers/positions')
+    return response.data.rangers || response.data
+  } catch (error) {
+    console.warn('[API Client] Backend unavailable, falling back to mock rangers')
+    return await getMockRangers()
   }
 }
 
