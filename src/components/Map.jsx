@@ -294,7 +294,7 @@ export default function Map({
         animate={{ opacity: 1, scale: 1 }}
         className={[
           'relative w-full min-h-[320px] rounded-xl border border-white/10 shadow-2xl overflow-hidden',
-          'aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/9] lg:aspect-[16/10] xl:aspect-auto',
+          'aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/9] lg:aspect-[16/10] xl:aspect-[16/9]',
           className,
         ]
           .filter(Boolean)

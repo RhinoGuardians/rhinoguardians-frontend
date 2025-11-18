@@ -159,7 +159,7 @@ export default function Dashboard({ onAlert }) {
         {/* Map, Stats & Detections */}
         <div className="order-1 lg:order-2 lg:col-span-1 flex flex-col gap-6">
           {/* Map */}
-          <div className="relative rounded-2xl border border-white/10 bg-slate-900/40 overflow-hidden h-[60vh] sm:h-[50vh] md:h-[55vh] lg:h-[65vh] xl:h-full min-h-[320px]">
+          <div className="relative rounded-2xl border border-white/10 bg-slate-900/40 overflow-hidden h-[60vh] sm:h-[50vh] md:h-[55vh] lg:h-[65vh] xl:h-[70vh] min-h-[320px]">
             <Map
               detections={filteredDetections}
               center={mapCenter}
